@@ -1,8 +1,11 @@
 from datetime import datetime
-from utils import handle_int_input
+from utils import handle_int_input, write_data_in_file
 from core import BudgetTracker, Transaction
 
+BUDGET_FILE = 'data/budget.txt'
+
 if __name__ == '__main__':
+    # todo: добавить логику для обновления баланса, а не обнуления после каждого запуска
     budget_tracker = BudgetTracker()
     
     print("Добро пожаловать в твой личный финансовый кошелек!")
@@ -10,15 +13,13 @@ if __name__ == '__main__':
     while True:
         
         print(""" 
-    
-    Доступны следующие функции: 
-    
-    1. Вывод баланса: Отображение текущего баланса, а также отдельно доходы и расходы.
-    2. Добавление записи: Добавление новой записи о доходе или расходе.
-    3. Редактирование записи: Изменение существующих записей о доходах и расходах.
-    4. Поиск по записям: Поиск записей по категории, дате или сумме.
-    
-    5. Выход
+Доступны следующие функции: 
+
+1. Вывод баланса: Отображение текущего баланса, а также отдельно доходы и расходы.
+2. Добавление записи: Добавление новой записи о доходе или расходе.
+3. Редактирование записи: Изменение существующих записей о доходах и расходах.
+4. Поиск по записям: Поиск записей по категории, дате или сумме.
+5. Выход
             """)
         
         choice = input("Выберите цифру (1/2/3/4/5): ")
@@ -27,9 +28,9 @@ if __name__ == '__main__':
         if choice == '1':
             
             print(f"""
-                Текущий баланс: {budget_tracker.balance}\n
-                Доходы: {budget_tracker.incomes}\n
-                Расходы: {budget_tracker.expenses}\n
+Текущий баланс: {budget_tracker.balance}\n
+Доходы: {budget_tracker.incomes}\n
+Расходы: {budget_tracker.expenses}\n
                 """)
             
         #* Добавление записи
@@ -43,7 +44,9 @@ if __name__ == '__main__':
             if category == 'in':
                 value = handle_int_input()
                 
+                transaction.type = 'Income'
                 transaction.amount = value
+                
                 budget_tracker.balance += value
                 budget_tracker.incomes += value
                 
@@ -52,13 +55,16 @@ if __name__ == '__main__':
                 description = input('Добавьте описание: ')
                 transaction.description = description
                 
-                print('Доход записан')
-            
+                # запись данных в файл
+                write_data_in_file(BUDGET_FILE, transaction)
+                
             # Занесение данных о расходе
             elif category == 'ex':
                 value = handle_int_input()
                 
-                transaction.amount = value #?
+                transaction.type = 'Expense'
+                transaction.amount = value
+                
                 budget_tracker.balance -= value
                 budget_tracker.expenses += value
             
@@ -67,10 +73,13 @@ if __name__ == '__main__':
                 description = input('Добавьте описание: ')
                 transaction.description = description
                 
-                print('Расход записан')
+                # запись данных в файл
+                write_data_in_file(BUDGET_FILE, transaction)
+                
             else:
                 print('Некорректный выбор. Выберите категорию доход или расход (in/ex)')
-            
+                
+            budget_tracker.transactions = transaction
         # Редактирование записи
         elif choice == '3':
             pass

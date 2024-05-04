@@ -2,15 +2,16 @@
 
 
 class Transaction:
-    def __init__(self, amount, date, description):
-        self.amount: int = amount
-        self.date = date
-        self.description: str = description
+    def __init__(self):
+        self.amount: int = 0
+        self.date: str = None
+        self.type: str = None
+        self.description: str = None
 
 
 class BudgetTracker:
     def __init__(self) -> None:
-        # self.transactions = None
+        self.transactions = None
         self.balance: int = 0
         self.incomes: int = 0
         self.expenses: int = 0

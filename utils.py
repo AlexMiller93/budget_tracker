@@ -1,6 +1,5 @@
 import os
 
-BUDGET_FILE = 'data/budget.txt'
 
 """ 
 Пример структуры данных в файле:
@@ -24,38 +23,40 @@ def handle_int_input():
             break
         
         except ValueError:
-            print('Введите целое число')
+            continue
             
     return value
 
 def create_file(filename: str):
     if not os.path.exists(filename):
-        with open(filename, 'w'):
+        with open(filename, 'w', encoding='utf-8'):
             pass
-
+        
 def write_data_in_file(filename: str, transaction: object): 
-    with open(filename, 'a') as f:
+    with open(filename, 'a', encoding='utf-8') as f:
         f.write(f"Дата: {transaction.date}\n")
         
-        #? переменная для категории - доход\расход 
-        f.write(f"Категория: {transaction.date}\n")
-        
-        # ? доход\расход 
-        f.write(f"Сумма: {transaction.date}\n")
-        
-        f.write(f"Описание: {transaction.description}\n")
+        if transaction.type == 'Income':
+            f.write(f"Категория: Доход\n")
+            print('Доход записан')
+        else:
+            f.write(f"Категория: Расход\n")
+            print('Расход записан')
+            
+        f.write(f"Сумма: {transaction.amount}\n")
+        f.write(f"Описание: {transaction.description}\n\n")
 
-def save_transactions(transactions):
+def save_transactions(transactions, filename: str):
     # если файл есть, добавим запись
-    if BUDGET_FILE.is_file():
-        write_data_in_file(BUDGET_FILE)
+    if filename.is_file():
+        write_data_in_file(filename)
             
     # если файла нет, создадим его и добавим запись
     else:
-        create_file(BUDGET_FILE)
-        write_data_in_file(BUDGET_FILE)
-            
-def load_transactions(transactions):
-    with open(BUDGET_FILE, 'r') as file:
+        create_file(filename)
+        write_data_in_file(filename)
+    
+def load_data(filename: str):
+    with open(filename, 'r') as file:
         pass
     
