@@ -16,6 +16,18 @@ BUDGET_FILE = 'data/budget.txt'
 
 """
 
+def handle_int_input():
+    value = input('Введите значение: ')
+    while True:
+        try:
+            value = int(value)
+            break
+        
+        except ValueError:
+            print('Введите целое число')
+            
+    return value
+
 def create_file(filename: str):
     if not os.path.exists(filename):
         with open(filename, 'w'):
