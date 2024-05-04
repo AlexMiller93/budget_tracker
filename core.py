@@ -2,13 +2,22 @@
 import datetime
 
 
-class Budget:
+class Transaction:
+    def __init__(self, balance, income, expenses, date, description):
     
-    def __init__(self):
-    
-        self.balance: int = 0
-        self.income: int = 0
-        self.expenses: int = 0
-        self.date = datetime.now()
-        self.description: str | None = None
+        self.balance: int = balance
+        self.income: int = income
+        self.expenses: int = expenses
+        self.date = date
+        self.description: str  = description
 
+
+class BudgetTracker:
+    def __init__(self) -> None:
+        self.transactions = None
+        
+    def add_income():
+        pass
+    
+    def add_expense():
+        pass
