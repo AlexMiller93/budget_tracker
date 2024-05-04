@@ -1,22 +1,16 @@
-import click
 
-@click.command(help="Вывод баланса, доходов и расходов")
-@click.argument("value", type=click.INT)
-def get_balance(value):
+def get_balance():
     # Вывод баланса: Показать текущий баланс, а также отдельно доходы и расходы.
-    pass
+    print('Функция получения баланса')
 
-@click.command()
 def add_note():
     # params: доход/расход кол-во описание=None
-    pass
+    print('Функция добавления записи')
 
-@click.command()
 def edit_note():
     #? params: доход/расход кол-во описание + дата
-    pass
+    print('Функция изменения записи')
 
-@click.command()
-def search():
+def search_note():
     #? params: доход/расход кол-во описание + дата
-    pass
+    print('Функция поиска записи')
