@@ -1,4 +1,4 @@
-from commands import get_balance, edit_note, add_note, search
+from commands import finance
 
 if __name__ == '__main__':
-    pass
+    finance()

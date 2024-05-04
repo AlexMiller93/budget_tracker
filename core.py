@@ -3,10 +3,12 @@ import datetime
 
 
 class Budget:
+    """ """
+    def __init__(self):
     
-    def __init__(self, balance, description):
-    
-        self.balance = balance
+        self.balance = 0
+        self.income = 0
+        self.expenses = 0
         self.date = datetime.now()
-        self.description = description
+        self.description = None
 

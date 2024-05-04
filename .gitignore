@@ -1,5 +1,7 @@
 .venv/
 
+__pycache__/
+
 not_publish/
 
 hello.py
