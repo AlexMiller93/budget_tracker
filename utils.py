@@ -75,20 +75,20 @@ def search_data(filename: str, target: str):
         return False
             
 def replace_word_in_file(filename: str, old_word: str, new_word: str):
-    with open(filename, 'r+') as file:
+    with open(filename, 'r+', encoding='utf-8') as file:
         text = file.read()
         
-        
-        text = text.replace(old_word, new_word)
-        file.seek(0)
-        file.write(text)
-        file.truncate()
-        print(f'В файле заменено {old_word} {new_word}')
-
+        words = text.split()
+        if old_word in words:
+            text = text.replace(old_word, new_word)
+            file.seek(0)
+            file.write(text)
+            file.truncate()
+            print(f'В файле заменено {old_word} {new_word}')
 
 def clean_data_in_file(filename: str): 
     open(filename, 'w').close()
     print('Файл очищен')
 
 # clean_data_in_file(BUDGET_FILE)
-replace_word_in_file(BUDGET_FILE, '15000', '9999')
+# replace_word_in_file(BUDGET_FILE, '400', '500')

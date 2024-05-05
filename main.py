@@ -2,6 +2,7 @@ from datetime import datetime
 from utils import (
     clean_data_in_file, 
     handle_int_input,
+    replace_word_in_file,
     save_transactions,
     search_data)
 
@@ -118,11 +119,21 @@ if __name__ == '__main__':
                             
                     # замена суммы
                     case 2:
-                        pass
-                    
+                        amount = input('Введите искомое значение: ')
+                        new_amount = input('Введите новое значение: ')
+
+                        replace_word_in_file(BUDGET_FILE, amount, new_amount)
+                        
                     # замена описания
                     case 3:
-                        pass
+                        desc = input('Введите искомое описание: ')
+                        new_desc = input('Введите новое описание: ')
+                        
+                        if desc == new_desc:
+                            print('Вы пытаетесь изменить одни и те же слова в описании')
+                        
+                        replace_word_in_file(BUDGET_FILE, desc, new_desc)
+                        
                     
                     case _:
                         print('Некорректный выбор. Выберите цифру из предложенных вариантов (1/2/3)')
