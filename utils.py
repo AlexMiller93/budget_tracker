@@ -1,5 +1,10 @@
 import os
+from typing import Type
 
+from core import Transaction
+
+
+BUDGET_FILE = 'data/budget.txt'
 
 """ 
 Пример структуры данных в файле:
@@ -32,7 +37,7 @@ def create_file(filename: str):
         with open(filename, 'w', encoding='utf-8'):
             pass
         
-def write_data_in_file(filename: str, transaction: object): 
+def write_data_in_file(filename: str, transaction: Type[Transaction]): 
     with open(filename, 'a', encoding='utf-8') as f:
         f.write(f"Дата: {transaction.date}\n")
         
@@ -44,19 +49,46 @@ def write_data_in_file(filename: str, transaction: object):
             print('Расход записан')
             
         f.write(f"Сумма: {transaction.amount}\n")
-        f.write(f"Описание: {transaction.description}\n\n")
+        
+        if transaction.description:
+            f.write(f"Описание: {transaction.description}\n\n")
+        else:
+            f.write(f"Описание: ---\n\n")
 
-def save_transactions(transactions, filename: str):
+def save_transactions(filename: str, transaction: Type[Transaction]):
     # если файл есть, добавим запись
-    if filename.is_file():
-        write_data_in_file(filename)
+    if os.path.isfile(filename):
+        write_data_in_file(filename, transaction)
             
     # если файла нет, создадим его и добавим запись
     else:
         create_file(filename)
-        write_data_in_file(filename)
+        write_data_in_file(filename, transaction)
     
-def load_data(filename: str):
+def search_data(filename: str, target: str):
     with open(filename, 'r') as file:
-        pass
-    
+        text = file.read()
+        if target in text:
+            print(f'Слово {target} найдено')
+            return True
+        print(f'Слова {target} нет')
+        return False
+            
+def replace_word_in_file(filename: str, old_word: str, new_word: str):
+    with open(filename, 'r+') as file:
+        text = file.read()
+        
+        
+        text = text.replace(old_word, new_word)
+        file.seek(0)
+        file.write(text)
+        file.truncate()
+        print(f'В файле заменено {old_word} {new_word}')
+
+
+def clean_data_in_file(filename: str): 
+    open(filename, 'w').close()
+    print('Файл очищен')
+
+# clean_data_in_file(BUDGET_FILE)
+replace_word_in_file(BUDGET_FILE, '15000', '9999')
