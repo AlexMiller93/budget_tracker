@@ -1,16 +1,14 @@
 
-def get_balance():
-    # Вывод баланса: Показать текущий баланс, а также отдельно доходы и расходы.
-    print('Функция получения баланса')
+from tracker import BudgetTracker
 
-def add_note():
-    # params: доход/расход кол-во описание=None
-    print('Функция добавления записи')
+def add_transaction(tracker: BudgetTracker) -> None:
+    pass
 
-def edit_note():
-    #? params: доход/расход кол-во описание + дата
-    print('Функция изменения записи')
+def edit_transaction(tracker: BudgetTracker) -> None:
+    pass
 
-def search_note():
-    #? params: доход/расход кол-во описание + дата
-    print('Функция поиска записи')
+def search(tracker: BudgetTracker) -> None:
+    pass
+
+def clear_data(tracker: BudgetTracker) -> None:
+    pass

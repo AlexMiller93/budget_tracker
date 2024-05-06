@@ -2,6 +2,7 @@ import os
 from typing import Type
 
 from core import Transaction
+from tracker import BudgetTracker
 
 
 BUDGET_FILE = 'data/budget.txt'
@@ -89,6 +90,28 @@ def replace_word_in_file(filename: str, old_word: str, new_word: str):
 def clean_data_in_file(filename: str): 
     open(filename, 'w').close()
     print('Файл очищен')
+
+def display_balance(tracker: BudgetTracker) -> None:
+    balance = tracker.get_balance()
+    income = tracker.get_total_income()
+    expenses = tracker.get_total_expenses()
+    print(f"""
+Текущий баланс: {balance}
+Доходы: {income}
+Расходы: {expenses}
+    """)
+    
+def display_menu() -> None:
+    print("""
+\nВам доступен следующий функционал:
+1. Вывод баланса: Отображение текущего баланса, а также отдельно доходы и расходы.
+2. Добавление записи: Добавление новой записи о доходе или расходе.
+3. Редактирование записи: Изменение существующих записей о доходах и расходах.
+4. Поиск по записям: Поиск записей по категории, дате или сумме.
+5. Удаление всех данных: Очистка данных о балансе, доходах и расходах из файла.
+6. Выход""")
+    
+
 
 # clean_data_in_file(BUDGET_FILE)
 # replace_word_in_file(BUDGET_FILE, '400', '500')
