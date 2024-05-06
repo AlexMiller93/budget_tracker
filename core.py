@@ -1,4 +1,4 @@
-import abc
+from abc import ABC, abstractmethod
 import datetime
 from decimal import Decimal
 from enum import Enum
@@ -11,29 +11,32 @@ class TransactionType(Enum):
 
 
 class Transaction:
-    """ 
+    """
     Класс для создания транзакций с полями:
         дата, тип транзакции, количество и описание
     """
-    
-    def __init__(self, date: datetime.date, type: TransactionType,
-                amount: Decimal, description: str = None) -> None:
+
+    def __init__(self,
+            date: datetime.date,
+            transaction_type: TransactionType,
+            amount: Decimal, 
+            description: str = None) -> None:
         self.date: date
-        self.type: type
+        self.transaction_type: transaction_type
         self.amount = amount
         self.description = description
 
 
-class BudgetPersistence(abc.ABC):
+class BudgetPersistence(ABC):
     """ """
-    @abc.abstractmethod
+    @abstractmethod
     def read_transactions(self) -> list[Transaction]:
         pass
 
-    @abc.abstractmethod
+    @abstractmethod
     def add_transaction(self, transaction: Transaction) -> None:
         pass
 
-    @abc.abstractmethod
+    @abstractmethod
     def update_transaction(self, index: int, transaction: Transaction) -> None:
         pass
