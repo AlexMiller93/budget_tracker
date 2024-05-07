@@ -36,8 +36,10 @@ def main():
                 clear_data(tracker)
             case '6':
                 break
+            case _:
+                print('\nНекорректный выбор. Введите цифру (1/2/3/4/5/6)')
 
-    print("До свидания!")
+    print("\nДо свидания!\n")
 
 
 if __name__ == '__main__':

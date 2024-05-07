@@ -16,6 +16,7 @@ class BudgetTracker:
 
     def get_total_income(self) -> Decimal:
         """ Метод для получения всех доходов """
+        
         balance = self._get_balance()
         return balance.income
 
@@ -43,11 +44,17 @@ class BudgetTracker:
         self._add_transaction(
             date, TransactionType.EXPENSE, amount, description)
         
-    def clean_data(self) -> _Balance:
+    def clear_balance(self) -> _Balance:
         """ Метод для очистки данных о балансе, доходах и расходах """
         
-        return self._clean_data
-
+        return self._clear_balance()
+    
+    
+    def change_tran_params(self, target: str, new: str):
+        ...
+        self._persistence.replace_data(target, new)
+        ...
+        
     def _add_transaction(self, date: datetime.date,
                     transaction_type: TransactionType,
                     amount: Decimal, 
@@ -89,9 +96,14 @@ class BudgetTracker:
             data = self._persistence.read_transactions()
             self._transactions = data
 
-    def _clean_data(self) -> _Balance:
-        if self._balance is not None:
+    def _clear_balance(self) -> _Balance:
+        
+        
+        if self._balance is not None or self._transactions is not None:
             income = Decimal(0)
             expense = Decimal(0)
+            self._transactions = []
             self._balance = _Balance(income, expense)
             return self._balance
+        
+        self._persistence.clear_data()

@@ -32,11 +32,30 @@ class FilePersistence(BudgetPersistence):
         transactions[index] = transaction
         self._write_data(transactions)
         
-    def {% load clean_data_tags %}(self) -> None:
+    def clear_data(self) -> None:
         """ Метод для очистки данных в файле """
         
-        self._clean_data()
-
+        self._clear_data()
+        
+    def search_data(self, target: str) -> bool:
+        """ Метод для поиска данных (сумма, описание) в файле """
+        
+        self._search_data(target)
+        
+    def replace_data(self, target: str, new: str) -> None:
+        """ Метод для замены данных в файле """
+        
+        if self._search_data(target):
+            with open(self._file_path, 'wt', encoding='utf-8') as file:
+                text = file.read()
+                
+                words = text.split()
+                for word in words:
+                    if target == word:
+                        text = text.replace(target, new)
+                        file.seek(0)
+                        file.write(text)
+                        file.truncate()
 
     def _read_data(self) -> list[Transaction]:
         if not os.path.isfile(self._file_path):
@@ -62,7 +81,13 @@ class FilePersistence(BudgetPersistence):
     def _format_transaction(self, transaction: Transaction) -> str:
         transaction.date = datetime.now()
         date_str = transaction.date.strftime(self._DATE_FORMAT)
-        text = f"{date_str}\t{transaction.transaction_type.value}\t{transaction.amount}\t{transaction.description}"
+        
+        if transaction.transaction_type.value == 0:
+            print_type = 'Доход'
+        else:
+            print_type = 'Расход'
+        
+        text = f"{date_str}\t{print_type}\t{transaction.amount}\t{transaction.description}"
         return text
 
     def _parse_transaction(self, raw_data: str) -> Transaction | None:
@@ -80,11 +105,11 @@ class FilePersistence(BudgetPersistence):
         except ValueError:
             return None
 
-        # обработка кода транзакции
-        try:
-            tran_type_code = int(parts[1])
-        except ValueError:
-            return None
+        # получение кода транзакции
+        if parts[1] == 'Доход':
+            tran_type_code = 0
+        else:
+            tran_type_code = 1
 
         # обработка типа транзакции
         try:
@@ -108,5 +133,24 @@ class FilePersistence(BudgetPersistence):
             description=tran_desc
         )
 
-    def _clean_data(self) -> None:
+    def _clear_data(self) -> None:
         open(self._file_path, 'w').close()
+        
+    def _search_data(self, target: str) -> bool:
+        # self._read_data()
+        if not os.path.isfile(self._file_path):
+            return 
+        
+        with open(self._file_path, 'rt', encoding='utf-8') as f:
+            for line in f:
+                if not line:
+                    continue
+                tran = self._parse_transaction(line)
+                if tran is None:
+                    continue
+                
+                if target == tran.amount or target == tran.description:
+                    return True
+                    break
+                
+            return False

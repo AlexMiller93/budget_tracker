@@ -1,3 +1,4 @@
+from decimal import Decimal
 import os
 from typing import Type
 
@@ -45,7 +46,17 @@ def display_menu() -> None:
 5. Удаление всех данных: Очистка данных о балансе, доходах и расходах из файла.
 6. Выход""")
     
-
+def handle_amount() -> Decimal:
+    while True:
+        value = input('Введите сумму: ')
+        
+        try:
+            amount = Decimal(value=value, context=None)
+            break
+        except ValueError:
+            pass
+        
+    return amount
 
 # clean_data_in_file(BUDGET_FILE)
 # replace_word_in_file(BUDGET_FILE, '400', '500')
