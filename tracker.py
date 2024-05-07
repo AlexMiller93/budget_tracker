@@ -42,6 +42,11 @@ class BudgetTracker:
 
         self._add_transaction(
             date, TransactionType.EXPENSE, amount, description)
+        
+    def clean_data(self) -> _Balance:
+        """ Метод для очистки данных о балансе, доходах и расходах """
+        
+        return self._clean_data
 
     def _add_transaction(self, date: datetime.date,
                     transaction_type: TransactionType,
@@ -83,3 +88,10 @@ class BudgetTracker:
         if self._transactions is None:
             data = self._persistence.read_transactions()
             self._transactions = data
+
+    def _clean_data(self) -> _Balance:
+        if self._balance is not None:
+            income = Decimal(0)
+            expense = Decimal(0)
+            self._balance = _Balance(income, expense)
+            return self._balance

@@ -21,8 +21,8 @@ class Transaction:
             transaction_type: TransactionType,
             amount: Decimal, 
             description: str = None) -> None:
-        self.date: date
-        self.transaction_type: transaction_type
+        self.date = date
+        self.transaction_type = transaction_type
         self.amount = amount
         self.description = description
 

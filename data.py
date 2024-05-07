@@ -7,7 +7,7 @@ from core import BudgetPersistence, Transaction, TransactionType
 class FilePersistence(BudgetPersistence):
     """ Класс для работы с данными по транзакциям """
 
-    _DATE_FORMAT = '%Y-%m-%dT%H:%M:%S'
+    _DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
 
     def __init__(self, file_path: str) -> None:
         self._file_path = file_path
@@ -31,6 +31,12 @@ class FilePersistence(BudgetPersistence):
         transactions = self._read_data()
         transactions[index] = transaction
         self._write_data(transactions)
+        
+    def {% load clean_data_tags %}(self) -> None:
+        """ Метод для очистки данных в файле """
+        
+        self._clean_data()
+
 
     def _read_data(self) -> list[Transaction]:
         if not os.path.isfile(self._file_path):
@@ -56,9 +62,7 @@ class FilePersistence(BudgetPersistence):
     def _format_transaction(self, transaction: Transaction) -> str:
         transaction.date = datetime.now()
         date_str = transaction.date.strftime(self._DATE_FORMAT)
-        text = f"""
-            {date_str}\t{transaction.transaction_type.value}\t
-            {transaction.amount}\t{transaction.description}"""
+        text = f"{date_str}\t{transaction.transaction_type.value}\t{transaction.amount}\t{transaction.description}"
         return text
 
     def _parse_transaction(self, raw_data: str) -> Transaction | None:
@@ -71,7 +75,7 @@ class FilePersistence(BudgetPersistence):
 
         # обработка даты
         try:
-            tran_date = datetime.datetime.strptime(
+            tran_date = datetime.strptime(
                 parts[0], self._DATE_FORMAT)
         except ValueError:
             return None
@@ -103,3 +107,6 @@ class FilePersistence(BudgetPersistence):
             amount=tran_amount,
             description=tran_desc
         )
+
+    def _clean_data(self) -> None:
+        open(self._file_path, 'w').close()

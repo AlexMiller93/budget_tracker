@@ -27,7 +27,7 @@ def main():
             case '1':
                 display_balance(tracker)
             case '2':
-                add_transaction(tracker, persistence)
+                add_transaction(tracker)
             case '3':
                 edit_transaction(tracker)
             case '4':
