@@ -1,29 +1,10 @@
-from decimal import Decimal
-import os
-from typing import Type
+import datetime
+from decimal import Decimal, InvalidOperation
 
-from core import Transaction
 from tracker import BudgetTracker
 
 
 BUDGET_FILE = 'data/budget.txt'
-
-
-def replace_word_in_file(filename: str, old_word: str, new_word: str):
-    with open(filename, 'r+', encoding='utf-8') as file:
-        text = file.read()
-        
-        words = text.split()
-        if old_word in words:
-            text = text.replace(old_word, new_word)
-            file.seek(0)
-            file.write(text)
-            file.truncate()
-            print(f'В файле заменено {old_word} {new_word}')
-
-def clean_data_in_file(filename: str): 
-    open(filename, 'w').close()
-    print('Файл очищен')
 
 
 def display_balance(tracker: BudgetTracker) -> None:
@@ -34,8 +15,9 @@ def display_balance(tracker: BudgetTracker) -> None:
 Текущий баланс: {balance}
 Доходы: {income}
 Расходы: {expenses}
-    """)
-    
+""")
+
+
 def display_menu() -> None:
     print("""
 \nВам доступен следующий функционал:\n
@@ -45,18 +27,56 @@ def display_menu() -> None:
 4. Поиск по записям: Поиск записей по категории, дате или сумме.
 5. Удаление всех данных: Очистка данных о балансе, доходах и расходах из файла.
 6. Выход""")
-    
-def handle_amount() -> Decimal:
+
+
+def input_type() -> bool:
+    while True:
+        value = input('''
+    Выберите тип транзакции доход или расход. Для этого нажмите (+/-) или (д/р): 
+    ''')
+        match value:
+            case '+' | 'д' | 'Д':
+                return True
+            case '-' | 'р' | 'Р':
+                return False
+            case _:
+                print(f"{value} не является типом, введите корректное значение")
+
+
+def input_date() -> datetime.date:
+    while True:
+        value = input('Введите дату (дд.мм.гггг): ')
+        try:
+            date = datetime.datetime.strptime(value, '%d.%m.%Y')
+            return date
+        except ValueError:
+            print(f"{value} не является датой, введите корректное значение")
+
+
+def input_amount() -> Decimal:
     while True:
         value = input('Введите сумму: ')
-        
         try:
-            amount = Decimal(value=value, context=None)
-            break
-        except ValueError:
-            pass
-        
-    return amount
+            amount = Decimal(value)
+            return amount
+        except InvalidOperation:
+            print(f"{value} не является числом, введите корректное значение")
 
-# clean_data_in_file(BUDGET_FILE)
-# replace_word_in_file(BUDGET_FILE, '400', '500')
+
+def input_description():
+    value = input('Введите описание: ')
+    return value.strip()
+
+
+def input_index(max_index: int) -> int:
+    while True:
+        value = input(f'Введите номер транзакции (целое число, от 0 до {max_index}): ')
+        try:
+            index = int(value)
+            if index < 0:
+                raise ValueError(f'{index} меньше нуля')
+            if index > max_index:
+                raise ValueError(f'{index} больше {max_index}')
+            return index
+        except ValueError:
+            print(f"{value} не является корректным значением")

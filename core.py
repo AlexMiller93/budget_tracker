@@ -16,11 +16,14 @@ class Transaction:
         дата, тип транзакции, количество и описание
     """
 
-    def __init__(self,
-            date: datetime.date,
-            transaction_type: TransactionType,
-            amount: Decimal, 
-            description: str = None) -> None:
+    def __init__(
+        self,
+        date: datetime.date,
+        transaction_type: TransactionType,
+        amount: Decimal,
+        description: str = None
+    ) -> None:
+
         self.date = date
         self.transaction_type = transaction_type
         self.amount = amount
@@ -29,7 +32,7 @@ class Transaction:
 
 class BudgetPersistence(ABC):
     """ Абстрактный класс для взаимодействия с транзакциями """
-    
+
     @abstractmethod
     def read_transactions(self) -> list[Transaction]:
         pass

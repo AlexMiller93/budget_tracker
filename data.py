@@ -31,7 +31,7 @@ class FilePersistence(BudgetPersistence):
         transactions = self._read_data()
         transactions[index] = transaction
         self._write_data(transactions)
-        
+
     def delete_transaction(self, index: int) -> None:
         """ Метод для удаления транзакций """
         transactions = self._read_data()
@@ -40,7 +40,7 @@ class FilePersistence(BudgetPersistence):
 
     def delete_transactions(self) -> None:
         self._write_data([])
-        
+
     def _read_data(self) -> list[Transaction]:
         if not os.path.isfile(self._file_path):
             return []
@@ -65,12 +65,12 @@ class FilePersistence(BudgetPersistence):
     def _format_transaction(self, transaction: Transaction) -> str:
         transaction.date = datetime.now()
         date_str = transaction.date.strftime(self._DATE_FORMAT)
-        
+
         if transaction.transaction_type.value == 0:
             print_type = 'Доход'
         else:
             print_type = 'Расход'
-        
+
         text = f"{date_str}\t{print_type}\t{transaction.amount}\t{transaction.description}"
         return text
 

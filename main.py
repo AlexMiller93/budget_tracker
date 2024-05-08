@@ -12,8 +12,6 @@ BUDGET_FILE = 'data/budget.txt'
 
 
 def main():
-    global persistence
-    
     persistence = FilePersistence(BUDGET_FILE)
     tracker = BudgetTracker(persistence)
 
