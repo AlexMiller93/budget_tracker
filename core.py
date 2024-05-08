@@ -28,7 +28,8 @@ class Transaction:
 
 
 class BudgetPersistence(ABC):
-    """ """
+    """ Абстрактный класс для взаимодействия с транзакциями """
+    
     @abstractmethod
     def read_transactions(self) -> list[Transaction]:
         pass
@@ -39,4 +40,12 @@ class BudgetPersistence(ABC):
 
     @abstractmethod
     def update_transaction(self, index: int, transaction: Transaction) -> None:
+        pass
+
+    @abstractmethod
+    def delete_transaction(self, index: int) -> None:
+        pass
+
+    @abstractmethod
+    def delete_transactions(self) -> None:
         pass

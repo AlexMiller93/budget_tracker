@@ -32,31 +32,15 @@ class FilePersistence(BudgetPersistence):
         transactions[index] = transaction
         self._write_data(transactions)
         
-    def clear_data(self) -> None:
-        """ Метод для очистки данных в файле """
-        
-        self._clear_data()
-        
-    def search_data(self, target: str) -> bool:
-        """ Метод для поиска данных (сумма, описание) в файле """
-        
-        self._search_data(target)
-        
-    def replace_data(self, target: str, new: str) -> None:
-        """ Метод для замены данных в файле """
-        
-        if self._search_data(target):
-            with open(self._file_path, 'wt', encoding='utf-8') as file:
-                text = file.read()
-                
-                words = text.split()
-                for word in words:
-                    if target == word:
-                        text = text.replace(target, new)
-                        file.seek(0)
-                        file.write(text)
-                        file.truncate()
+    def delete_transaction(self, index: int) -> None:
+        """ Метод для удаления транзакций """
+        transactions = self._read_data()
+        transactions.pop(index)
+        self._write_data(transactions)
 
+    def delete_transactions(self) -> None:
+        self._write_data([])
+        
     def _read_data(self) -> list[Transaction]:
         if not os.path.isfile(self._file_path):
             return []
@@ -132,25 +116,3 @@ class FilePersistence(BudgetPersistence):
             amount=tran_amount,
             description=tran_desc
         )
-
-    def _clear_data(self) -> None:
-        open(self._file_path, 'w').close()
-        
-    def _search_data(self, target: str) -> bool:
-        # self._read_data()
-        if not os.path.isfile(self._file_path):
-            return 
-        
-        with open(self._file_path, 'rt', encoding='utf-8') as f:
-            for line in f:
-                if not line:
-                    continue
-                tran = self._parse_transaction(line)
-                if tran is None:
-                    continue
-                
-                if target == tran.amount or target == tran.description:
-                    return True
-                    break
-                
-            return False

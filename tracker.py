@@ -43,18 +43,63 @@ class BudgetTracker:
 
         self._add_transaction(
             date, TransactionType.EXPENSE, amount, description)
-        
-    def clear_balance(self) -> _Balance:
-        """ Метод для очистки данных о балансе, доходах и расходах """
-        
-        return self._clear_balance()
     
-    
-    def change_tran_params(self, target: str, new: str):
-        ...
-        self._persistence.replace_data(target, new)
-        ...
+    def update(self,
+            index: int,
+            date: datetime.date | None = None,
+            amount: Decimal | None = None,
+            description: str | None = None) -> None:
+        """ Метод для обновления данных (дата, сумма, описание)"""
         
+        self._ensure_data()
+        tran = self._transactions[index]
+        if date is not None:
+            tran.date = date
+        if amount is not None:
+            tran.amount = amount
+        if description is not None:
+            tran.description = description
+        self._persistence.update_transaction(index, tran)
+        self._balance = None
+    
+    def search(self,
+            is_income: bool | None = None,
+            date: datetime.date | None = None,
+            amount: Decimal | None = None) -> list[tuple[int, Transaction]]:
+        """ Метод для поиска данных (тип транзакции, дата, сумма)"""
+        
+        # определение типа транзакции в зависимости входных параметров 
+        if is_income is None:
+            transaction_type = None
+        elif is_income:
+            transaction_type = TransactionType.INCOME
+        else:
+            transaction_type = TransactionType.EXPENSE
+        self._ensure_data()
+        
+        # создание списка кортежей с искомыми транзакциями
+        result = [(idx, tran) for (idx, tran) in enumerate(self._transactions) if
+                (transaction_type is None or tran.type == transaction_type)
+                and
+                (date is None or tran.date == date)
+                and
+                (amount is None or tran.amount == amount)
+                ]
+        return result
+    
+    def clear(self) -> None:
+        """ Метод для очистки данных о транзакциях, балансе, доходах и расходах """
+        
+        self._persistence.delete_transactions()
+        self._transactions = []
+        self._balance = None
+    
+    def get_count(self) -> int:
+        """ Метод для получения текущего количества транзакций"""
+        
+        self._ensure_data()
+        return len(self._transactions)
+    
     def _add_transaction(self, date: datetime.date,
                     transaction_type: TransactionType,
                     amount: Decimal, 
