@@ -1,7 +1,7 @@
 import datetime
 from decimal import Decimal, InvalidOperation
 
-from tracker import BudgetTracker
+from project.src.budget_tracker.tracker import BudgetTracker
 
 
 BUDGET_FILE = 'data/budget.txt'
@@ -31,9 +31,7 @@ def display_menu() -> None:
 
 def input_type() -> bool:
     while True:
-        value = input('''
-Выберите тип транзакции доход или расход. Для этого нажмите (+/-) или (д/р):
-    ''')
+        value = input('''Выберите тип транзакции доход или расход. Для этого нажмите (+/-) или (д/р): ''')
         match value:
             case '+' | 'д' | 'Д':
                 return True

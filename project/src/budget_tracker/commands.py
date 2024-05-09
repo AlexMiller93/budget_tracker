@@ -1,8 +1,8 @@
 
 import datetime
-from core import TransactionType
-from tracker import BudgetTracker
-from utils import (
+from project.src.budget_tracker.core import TransactionType
+from project.src.budget_tracker.tracker import BudgetTracker
+from project.src.budget_tracker.utils import (
     input_amount,
     input_date,
     input_description,
@@ -132,6 +132,7 @@ def clear_data(tracker: BudgetTracker) -> None:
             case 'y' | 'Y':
                 tracker.clear()
                 print('Данные с трекера удалены!')
+                break
             case 'n' | 'N':
                 return
             case _:

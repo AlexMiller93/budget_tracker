@@ -1,7 +1,11 @@
 from collections import namedtuple
 import datetime
 from decimal import Decimal
-from core import BudgetStorage, Transaction, TransactionType
+from project.src.budget_tracker.core import (
+    BudgetStorage,
+    Transaction,
+    TransactionType
+    )
 
 _Balance = namedtuple('Balance', ('income', 'expense'))
 
@@ -66,7 +70,7 @@ class BudgetTracker:
             tran.amount = amount
         if description is not None:
             tran.description = description
-        self.storage.update_transaction(index, tran)
+        self._storage.update_transaction(index, tran)
         self._balance = None
 
     def search(
@@ -128,7 +132,7 @@ class BudgetTracker:
             amount=amount,
             description=description
         )
-        self.storage.add_transaction(tran)
+        self._storage.add_transaction(tran)
         self._transactions.append(tran)
 
         # подсчет баланса в зависимости от типа транзакции
@@ -152,7 +156,7 @@ class BudgetTracker:
 
     def _ensure_data(self) -> None:
         if self._transactions is None:
-            data = self.storage.read_transactions()
+            data = self._storage.read_transactions()
             self._transactions = data
 
     def _clear_balance(self) -> _Balance:
@@ -164,4 +168,4 @@ class BudgetTracker:
             self._balance = _Balance(income, expense)
             return self._balance
 
-        self.storage.clear_data()
+        self._storage.clear_data()

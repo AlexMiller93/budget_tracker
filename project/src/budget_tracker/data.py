@@ -1,7 +1,11 @@
 from datetime import datetime
 from decimal import Decimal, InvalidOperation
 import os
-from core import BudgetStorage, Transaction, TransactionType
+from project.src.budget_tracker.core import (
+    BudgetStorage,
+    Transaction,
+    TransactionType
+    )
 
 
 class FileStorage(BudgetStorage):

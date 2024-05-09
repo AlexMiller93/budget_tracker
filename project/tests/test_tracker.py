@@ -2,50 +2,73 @@ import datetime
 from decimal import Decimal
 import unittest
 
-from project.src.data import BudgetTracker
-from project.src.budget_tracker.core import Transaction
+from project.src.budget_tracker.data import FileStorage
+from project.src.budget_tracker.tracker import BudgetTracker
 
 
 class TestBudgetTracker(unittest.TestCase):
     def setUp(self):
-        self.tracker = BudgetTracker()
+        self.file_path = 'data/test.txt'
+        self.storage = FileStorage(self.file_path)
+        self.tracker = BudgetTracker(self.storage)
 
     def test_add_income(self):
-
         self.tracker.add_income(
             date=datetime.datetime.now(),
             amount=Decimal(1000),
             description='тест доход')
 
-        self.assertEqual(self.tracker.get_total_income(), '1000')
+        self.assertEqual(
+            self.tracker.get_balance(), Decimal('1000'))
 
     def test_add_expense(self):
-        self.tran_1 = Transaction(
-            date=datetime.datetime.now(),
-            amount=Decimal(1000),
-            description='тест расход'
-        )
-
         self.tracker.add_expense(
             date=datetime.datetime.now(),
             amount=Decimal(100),
-            description='тест доход')
-        self.assertEqual(self.tracker.get_total_expenses(), '100')
+            description='тест расход')
+        self.assertEqual(
+            self.tracker.get_balance(), Decimal('-100'))
 
     def test_get_total_income(self):
-        pass
+        self.tracker.add_income(
+            date=datetime.datetime.now(),
+            amount=Decimal(500),
+            description='тест доход')
+
+        self.assertEqual(self.tracker.get_total_income(), Decimal('500'))
 
     def test_get_total_expense(self):
-        pass
+        self.tracker.add_expense(
+            date=datetime.datetime.now(),
+            amount=Decimal(200),
+            description='тест расход')
+        self.assertEqual(self.tracker.get_total_expenses(), Decimal('200'))
 
     def test_get_total_balance(self):
-        pass
+        self.tracker.add_income(
+            date=datetime.datetime.now(),
+            amount=Decimal(600),
+            description='тест доход')
+
+        self.tracker.add_expense(
+            date=datetime.datetime.now(),
+            amount=Decimal(300),
+            description='тест расход')
+        self.assertEqual(self.tracker.get_balance(), Decimal('300'))
 
     def test_clear(self):
-        pass
+        self.tracker.clear()
+        self.assertEqual(self.tracker.get_balance(), Decimal('0'))
 
-    def test_get_count(self):
-        pass
+    # todo: update tests
+    def test_update_amount(self):
+        self.tracker.update(
+            index=0,
+            amount=Decimal(500),
+        )
+        self.assertEqual(self.tracker.get_balance(), Decimal('1000'))
 
     def tearDown(self):
-        pass
+        self.tracker.clear()
+
+# python -m unittest project.tests.test_tracker
