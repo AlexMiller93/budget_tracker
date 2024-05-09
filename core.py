@@ -30,7 +30,7 @@ class Transaction:
         self.description = description
 
 
-class BudgetPersistence(ABC):
+class BudgetStorage(ABC):
     """ Абстрактный класс для взаимодействия с транзакциями """
 
     @abstractmethod

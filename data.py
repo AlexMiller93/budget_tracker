@@ -1,10 +1,10 @@
 from datetime import datetime
 from decimal import Decimal, InvalidOperation
 import os
-from core import BudgetPersistence, Transaction, TransactionType
+from core import BudgetStorage, Transaction, TransactionType
 
 
-class FilePersistence(BudgetPersistence):
+class FileStorage(BudgetStorage):
     """ Класс для работы с данными по транзакциям """
 
     _DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
@@ -71,14 +71,15 @@ class FilePersistence(BudgetPersistence):
         else:
             print_type = 'Расход'
 
-        text = f"{date_str}\t{print_type}\t{transaction.amount}\t{transaction.description}"
+        text = f"""
+{date_str}\t{print_type}\t{transaction.amount}\t{transaction.description}"""
+
         return text
 
     def _parse_transaction(self, raw_data: str) -> Transaction | None:
-        # разбиваем данные на 4 части
+        # разбиваем данные на не менее 4 части
         parts = raw_data.split('\t', maxsplit=3)
 
-        # если
         if len(parts) != 4:
             return None
 

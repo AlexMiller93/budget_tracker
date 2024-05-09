@@ -3,7 +3,7 @@ from commands import (
     clear_data,
     edit_transaction,
     search)
-from data import FilePersistence
+from data import FileStorage
 
 from tracker import BudgetTracker
 from utils import display_balance, display_menu
@@ -12,8 +12,8 @@ BUDGET_FILE = 'data/budget.txt'
 
 
 def main():
-    persistence = FilePersistence(BUDGET_FILE)
-    tracker = BudgetTracker(persistence)
+    storage = FileStorage(BUDGET_FILE)
+    tracker = BudgetTracker(storage)
 
     print("\nДобро пожаловать в твой личный финансовый кошелек!")
     while True:

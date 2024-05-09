@@ -1,7 +1,7 @@
 from collections import namedtuple
 import datetime
 from decimal import Decimal
-from core import BudgetPersistence, Transaction, TransactionType
+from core import BudgetStorage, Transaction, TransactionType
 
 _Balance = namedtuple('Balance', ('income', 'expense'))
 
@@ -9,14 +9,14 @@ _Balance = namedtuple('Balance', ('income', 'expense'))
 class BudgetTracker:
     """ Класс для хранения данных о транзакциях и балансе """
 
-    def __init__(self, persistence: BudgetPersistence) -> None:
-        self._persistence = persistence
+    def __init__(self, storage: BudgetStorage) -> None:
+        self._storage = storage
         self._transactions: list[Transaction] = None
         self._balance: _Balance = None
 
     def get_total_income(self) -> Decimal:
         """ Метод для получения всех доходов """
-        
+
         balance = self._get_balance()
         return balance.income
 
@@ -30,8 +30,12 @@ class BudgetTracker:
         balance = self._get_balance()
         return balance.income - balance.expense
 
-    def add_income(self,
-        date: datetime.date, amount: Decimal, description: str = None) -> None:
+    def add_income(
+        self,
+        date: datetime.date,
+        amount: Decimal,
+        description: str = None
+    ) -> None:
         """ Метод для увеличения дохода """
 
         self._add_transaction(
@@ -62,7 +66,7 @@ class BudgetTracker:
             tran.amount = amount
         if description is not None:
             tran.description = description
-        self._persistence.update_transaction(index, tran)
+        self.storage.update_transaction(index, tran)
         self._balance = None
 
     def search(
@@ -96,20 +100,23 @@ class BudgetTracker:
     def clear(self) -> None:
         """ Метод для очистки данных о транзакциях, балансе, доходах и расходах """
 
-        self._persistence.delete_transactions()
+        self._storage.delete_transactions()
         self._transactions = []
         self._balance = None
 
     def get_count(self) -> int:
         """ Метод для получения текущего количества транзакций"""
-        
+
         self._ensure_data()
         return len(self._transactions)
 
-    def _add_transaction(self, date: datetime.date,
-                    transaction_type: TransactionType,
-                    amount: Decimal, 
-                    description: str = None) -> None:
+    def _add_transaction(
+        self,
+        date: datetime.date,
+        transaction_type: TransactionType,
+        amount: Decimal,
+        description: str = None
+    ) -> None:
         self._ensure_data()
 
         # получение баланса
@@ -120,7 +127,7 @@ class BudgetTracker:
             amount=amount,
             description=description
         )
-        self._persistence.add_transaction(tran)
+        self.storage.add_transaction(tran)
         self._transactions.append(tran)
 
         # подсчет баланса в зависимости от типа транзакции
@@ -144,17 +151,16 @@ class BudgetTracker:
 
     def _ensure_data(self) -> None:
         if self._transactions is None:
-            data = self._persistence.read_transactions()
+            data = self.storage.read_transactions()
             self._transactions = data
 
     def _clear_balance(self) -> _Balance:
-        
-        
+
         if self._balance is not None or self._transactions is not None:
             income = Decimal(0)
             expense = Decimal(0)
             self._transactions = []
             self._balance = _Balance(income, expense)
             return self._balance
-        
-        self._persistence.clear_data()
+
+        self.storage.clear_data()

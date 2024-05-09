@@ -46,7 +46,8 @@ def edit_transaction(tracker: BudgetTracker) -> None:
     index = input_index(tran_count - 1)
 
     while True:
-        target = input('Укажите, что изменить: дата (1), сумма (2), описание (3): ')
+        target = input('''
+Укажите, что изменить: дата (1), сумма (2), описание (3): ''')
         params = None
         match target:
             case '1':
