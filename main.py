@@ -1,12 +1,12 @@
-from commands import (
+from project.src.budget_tracker.commands import (
     add_transaction,
     clear_data,
     edit_transaction,
     search)
-from data import FileStorage
+from project.src.budget_tracker.data import FileStorage
 
-from tracker import BudgetTracker
-from utils import display_balance, display_menu
+from project.src.budget_tracker.tracker import BudgetTracker
+from project.src.budget_tracker.utils import display_balance, display_menu
 
 BUDGET_FILE = 'data/budget.txt'
 

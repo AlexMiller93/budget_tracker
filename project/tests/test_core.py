@@ -2,7 +2,7 @@ import unittest
 
 import datetime
 from decimal import Decimal
-from core import Transaction, TransactionType
+from project.src.budget_tracker.core import Transaction, TransactionType
 
 
 class TestTransaction(unittest.TestCase):

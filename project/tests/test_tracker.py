@@ -2,8 +2,8 @@ import datetime
 from decimal import Decimal
 import unittest
 
-from data import BudgetTracker
-from core import Transaction
+from project.src.data import BudgetTracker
+from project.src.budget_tracker.core import Transaction
 
 
 class TestBudgetTracker(unittest.TestCase):

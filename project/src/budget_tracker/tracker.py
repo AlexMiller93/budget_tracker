@@ -88,17 +88,18 @@ class BudgetTracker:
         self._ensure_data()
 
         # создание списка кортежей с искомыми транзакциями
-        result = [(idx, tran) for (idx, tran) in enumerate(self._transactions) if
-                (transaction_type is None or tran.type == transaction_type)
-                and
-                (date is None or tran.date == date)
-                and
-                (amount is None or tran.amount == amount)
+        result = [
+            (idx, tran) for (idx, tran) in enumerate(self._transactions) if
+            (transaction_type is None or tran.type == transaction_type)
+            and
+            (date is None or tran.date == date)
+            and
+            (amount is None or tran.amount == amount)
                 ]
         return result
 
     def clear(self) -> None:
-        """ Метод для очистки данных о транзакциях, балансе, доходах и расходах """
+        """ Метод для очистки данных о транзакциях и балансе """
 
         self._storage.delete_transactions()
         self._transactions = []
