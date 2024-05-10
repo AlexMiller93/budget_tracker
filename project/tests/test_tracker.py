@@ -60,13 +60,48 @@ class TestBudgetTracker(unittest.TestCase):
         self.tracker.clear()
         self.assertEqual(self.tracker.get_balance(), Decimal('0'))
 
-    # todo: update tests
     def test_update_amount(self):
+        self.tracker.add_income(
+            date=datetime.datetime.now(),
+            amount=Decimal(400),
+            description='тест доход')
+
+        self.tracker.add_expense(
+            date=datetime.datetime.now(),
+            amount=Decimal(300),
+            description='тест расход')
+
         self.tracker.update(
             index=0,
             amount=Decimal(500),
         )
-        self.assertEqual(self.tracker.get_balance(), Decimal('1000'))
+        self.assertEqual(self.tracker.get_balance(), Decimal('200'))
+
+    def test_update_date(self):
+        self.tracker.add_income(
+            date=datetime.datetime.now(),
+            amount=Decimal(100),
+            description='тест доход')
+
+        self.tracker.update(
+            index=0,
+            date=datetime.datetime.now(),
+        )
+        self.assertEqual(self.tracker.get_balance(), Decimal('100'))
+
+    def test_search_income(self):
+        self.tracker.add_income(
+            date=datetime.datetime.now(),
+            amount=Decimal(1000),
+            description='тест доход')
+
+        self.tracker.add_expense(
+            date=datetime.datetime.now(),
+            amount=Decimal(300),
+            description='тест расход')
+
+        self.tracker.search(is_income=True)
+        self.assertEqual(self.tracker.get_balance(), Decimal('700'))
 
     def tearDown(self):
         self.tracker.clear()

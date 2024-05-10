@@ -70,7 +70,7 @@ def input_description():
 def input_index(max_index: int) -> int:
     while True:
         value = input(f'''
-            Введите номер транзакции (целое число, от 0 до {max_index}): ''')
+Введите номер транзакции (целое число, от 0 до {max_index}): ''')
         try:
             index = int(value)
             if index < 0:

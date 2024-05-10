@@ -82,8 +82,8 @@ def search(tracker: BudgetTracker) -> None:
 
     while True:
         search_params = None
-        target = input('''Укажите, по каким параметрам искать
-                    (тип транзакции (1), дата (2), сумма (3)): ''')
+        target = input('''
+Укажите, по каким параметрам искать (тип транзакции (1), дата (2), сумма (3)): ''')
         match target:
 
             case '1':
@@ -111,9 +111,9 @@ def search(tracker: BudgetTracker) -> None:
     if len(matching_transactions) == 0:
         print('Данных, соответствующих критериям, не найдено!')
     else:
-        print('Найдены транзакции:')
+        print('Найдены транзакции:\n')
         for (idx, tran) in matching_transactions:
-            type_name = 'доход' if tran.type == TransactionType.INCOME else 'расход'
+            type_name = 'доход' if tran.transaction_type == TransactionType.INCOME else 'расход'
             date_str = tran.date.strftime('%d.%m.%Y')
             print(f'Транзакция №{idx}')
             print(f'- тип: {type_name}')

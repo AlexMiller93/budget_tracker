@@ -94,7 +94,7 @@ class BudgetTracker:
         # создание списка кортежей с искомыми транзакциями
         result = [
             (idx, tran) for (idx, tran) in enumerate(self._transactions) if
-            (transaction_type is None or tran.type == transaction_type)
+            (transaction_type is None or tran.transaction_type == transaction_type)
             and
             (date is None or tran.date == date)
             and
@@ -158,14 +158,3 @@ class BudgetTracker:
         if self._transactions is None:
             data = self._storage.read_transactions()
             self._transactions = data
-
-    def _clear_balance(self) -> _Balance:
-
-        if self._balance is not None or self._transactions is not None:
-            income = Decimal(0)
-            expense = Decimal(0)
-            self._transactions = []
-            self._balance = _Balance(income, expense)
-            return self._balance
-
-        self._storage.clear_data()
