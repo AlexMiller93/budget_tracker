@@ -1,7 +1,7 @@
 from project.src.budget_tracker.commands import (
     add_transaction,
     clear_data,
-    edit_transaction,
+    update_transaction,
     search)
 from project.src.budget_tracker.data import FileStorage
 
@@ -27,7 +27,7 @@ def main():
             case '2':
                 add_transaction(tracker)
             case '3':
-                edit_transaction(tracker)
+                update_transaction(tracker)
             case '4':
                 search(tracker)
             case '5':

@@ -34,7 +34,7 @@ def add_transaction(tracker: BudgetTracker) -> None:
         print('Данные о расходе записаны!')
 
 
-def edit_transaction(tracker: BudgetTracker) -> None:
+def update_transaction(tracker: BudgetTracker) -> None:
     """ Функция для изменения транзакции по введенным параметрам:
         дата, сумма или описание. Обновляет транзакцию в файле.
     """
